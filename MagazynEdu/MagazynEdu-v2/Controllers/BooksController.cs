@@ -1,6 +1,7 @@
 ﻿using MagazynEdu.ApplicationServices.API.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,33 +11,30 @@ namespace MagazynEdu_v2.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class BooksController : ControllerBase
+    public class BooksController : ApiControllerBase
     {
-        private readonly IMediator mediator;
 
-        public BooksController(IMediator mediator)
+        public BooksController(IMediator mediator, ILogger<BooksController> logger) : base(mediator)
         {
-            this.mediator = mediator;
+            logger.LogInformation("We are in Books");
         }
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetAllBooks([FromQuery] GetBooksRequest request)
+        public Task<IActionResult> GetAllBooks([FromQuery] GetBooksRequest request)
         {
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<GetBooksRequest, GetBooksResponse>(request);
         }
 
         [HttpGet]
         [Route("{bookId}")]
-        public async Task<IActionResult> GetById([FromRoute] int bookId)
+        public Task<IActionResult> GetById([FromRoute] int bookId)
         {
             var request = new GetBookByIdRequest()
             {
                 BookId = bookId
             };
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<GetBookByIdRequest, GetBookByIdResponse>(request);
         }
     }
 }

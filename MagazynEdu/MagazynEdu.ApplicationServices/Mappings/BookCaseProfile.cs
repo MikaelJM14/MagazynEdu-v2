@@ -18,7 +18,8 @@ namespace MagazynEdu.ApplicationServices.API.Mappings
 
             this.CreateMap<BookCase, Domain.Models.BookCase>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
-                .ForMember(x => x.Number, y => y.MapFrom(z => z.Number));
+                .ForMember(x => x.Number, y => y.MapFrom(z => z.Number))
+                .ForMember(x => x.BookTitles, y => y.MapFrom(z => z.Books != null ? z.Books.Select(x => x.Title) : new List<string>()));
         }
     }
 }

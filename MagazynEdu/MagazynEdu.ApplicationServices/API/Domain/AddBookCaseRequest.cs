@@ -10,5 +10,6 @@ namespace MagazynEdu.ApplicationServices.API.Domain
     public class AddBookCaseRequest : IRequest<AddBookCaseResponse>
     {
         public int Number { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MagazynEdu.ApplicationServices.API.Domain;
+using MagazynEdu.ApplicationServices.API.ErrorHanding;
 using MagazynEdu.DataAccess;
 using MagazynEdu.DataAccess.CQRS.Commands;
 using MagazynEdu.DataAccess.CQRS.Queries;
@@ -31,6 +32,15 @@ namespace MagazynEdu.ApplicationServices.API.Handlers
                 Id = request.BookId
             };
             var book = await this.queryExecutor.Execute(query);
+            if(book == null)
+            {
+                return new GetBookByIdResponse()
+                {
+                    Error = new ErrorModel(ErrorType.NotFound)
+                };
+            }
+
+
             var mappedBook = this.mapper.Map<Domain.Models.Book>(book);
             var response = new GetBookByIdResponse()
             {

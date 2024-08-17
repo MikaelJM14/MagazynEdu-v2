@@ -14,6 +14,7 @@ namespace MagazynEdu.DataAccess.CQRS.Queries
 
         public override async Task<Book> Execute(WarehouseStorageContext context)
         {
+            var avg = context.BookCases.Select(x => x.Number).Average();
             var book = await context.Books.FirstOrDefaultAsync(x => x.Id == this.Id);
             return book;
         }

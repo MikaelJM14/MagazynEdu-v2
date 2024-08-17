@@ -1,5 +1,8 @@
+using FluentValidation.AspNetCore;
 using MagazynEdu.ApplicationServices.API.Domain;
 using MagazynEdu.ApplicationServices.API.Mappings;
+using MagazynEdu.ApplicationServices.API.Validators;
+using MagazynEdu.ApplicationServices.Components.OpenWeather;
 using MagazynEdu.DataAccess;
 using MagazynEdu.DataAccess.CQRS;
 using MagazynEdu.DataAccess.CQRS.Commands;
@@ -33,8 +36,18 @@ namespace MagazynEdu_v2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvcCore()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddBookCaseRequestValidator>());
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             services.AddTransient<IQueryExecutor, QueryExecutor>();
             services.AddTransient<ICommandExecutor, CommandExecutor>();
+
+            services.AddTransient<IWeatherConnector, WeatherConnector>();
 
             services.AddAutoMapper(typeof(BooksProfile).Assembly);
 

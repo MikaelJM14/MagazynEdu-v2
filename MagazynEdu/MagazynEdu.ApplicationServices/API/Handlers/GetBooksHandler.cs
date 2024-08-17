@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MagazynEdu.ApplicationServices.API.Domain;
+using MagazynEdu.ApplicationServices.Components.OpenWeather;
 using MagazynEdu.DataAccess;
 using MagazynEdu.DataAccess.CQRS.Queries;
 using MagazynEdu.DataAccess.Entities;
@@ -17,15 +18,18 @@ namespace MagazynEdu.ApplicationServices.API.Handlers
     {
         private readonly IMapper mapper;
         private readonly IQueryExecutor queryExecutor;
+        private readonly IWeatherConnector weatherConnector;
 
-        public GetBooksHandler(IMapper mapper, IQueryExecutor queryExecutor)
+        public GetBooksHandler(IMapper mapper, IQueryExecutor queryExecutor, IWeatherConnector weatherConnector)
         {
             this.mapper = mapper;
             this.queryExecutor = queryExecutor;
+            this.weatherConnector = weatherConnector;
         }
 
         public async Task<GetBooksResponse> Handle(GetBooksRequest request, CancellationToken cancellationToken)
         {
+            var weather = await this.weatherConnector.Fetch("Brzeg");
             var query = new GetBooksQuery()
             {
                 Title = request.Title
