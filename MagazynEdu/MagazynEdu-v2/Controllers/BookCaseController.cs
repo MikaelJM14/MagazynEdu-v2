@@ -1,5 +1,7 @@
-﻿using MagazynEdu.DataAccess;
+﻿using MagazynEdu.ApplicationServices.API.Domain;
+using MagazynEdu.DataAccess;
 using MagazynEdu.DataAccess.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,25 +14,19 @@ namespace MagazynEdu_v2.Controllers
     [Route("[controller]")]
     public class BookCaseController : ControllerBase
     {
-        private readonly IRepository<BookCase> bookCaseRepository;
+        private readonly IMediator mediator;
 
-        public BookCaseController(IRepository<BookCase> bookCaseRepository)
+        public BookCaseController(IMediator mediator)
         {
-            this.bookCaseRepository = bookCaseRepository;
+            this.mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("")]
-        public IEnumerable<BookCase> GetAllBooks()
+        public async Task<IActionResult> AddBookCase([FromBody] AddBookCaseRequest request)
         {
-            return this.bookCaseRepository.GetAll();
-        }
-
-        [HttpGet]
-        [Route("{bookCaseId}")]
-        public BookCase GetBookById(int bookCaseId)
-        {
-            return this.bookCaseRepository.GetById(bookCaseId);
-        }
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        } 
     }
 }

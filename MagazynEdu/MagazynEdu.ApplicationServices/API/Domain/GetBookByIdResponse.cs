@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using MagazynEdu.ApplicationServices.API.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace MagazynEdu.ApplicationServices.API.Domain
 {
-    public class GetBooksRequest : IRequest<GetBooksResponse>
+    public class GetBookByIdResponse : ResponseBase<Book>
     {
-        public string Title { get; set; }
     }
 }

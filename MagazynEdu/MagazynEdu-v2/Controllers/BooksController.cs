@@ -26,5 +26,17 @@ namespace MagazynEdu_v2.Controllers
             var response = await this.mediator.Send(request);
             return this.Ok(response);
         }
+
+        [HttpGet]
+        [Route("{bookId}")]
+        public async Task<IActionResult> GetById([FromRoute] int bookId)
+        {
+            var request = new GetBookByIdRequest()
+            {
+                BookId = bookId
+            };
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        }
     }
 }

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace MagazynEdu.ApplicationServices.API.Domain
 {
-    public class GetBooksRequest : IRequest<GetBooksResponse>
+    public class GetBookByIdRequest : IRequest<GetBookByIdResponse>
     {
-        public string Title { get; set; }
+        public int BookId { get; set; }
     }
 }

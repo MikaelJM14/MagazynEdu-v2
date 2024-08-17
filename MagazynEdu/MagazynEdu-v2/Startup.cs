@@ -1,5 +1,8 @@
 using MagazynEdu.ApplicationServices.API.Domain;
+using MagazynEdu.ApplicationServices.API.Mappings;
 using MagazynEdu.DataAccess;
+using MagazynEdu.DataAccess.CQRS;
+using MagazynEdu.DataAccess.CQRS.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,6 +33,11 @@ namespace MagazynEdu_v2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IQueryExecutor, QueryExecutor>();
+            services.AddTransient<ICommandExecutor, CommandExecutor>();
+
+            services.AddAutoMapper(typeof(BooksProfile).Assembly);
+
             services.AddMediatR(typeof(ResponseBase<>));
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
