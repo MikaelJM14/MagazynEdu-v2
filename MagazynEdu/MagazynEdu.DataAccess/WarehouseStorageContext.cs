@@ -19,5 +19,7 @@ namespace MagazynEdu.DataAccess
         public DbSet<BookCase> BookCases { get; set; }
 
         public DbSet<Author> Authors { get; set; }
+
+        public DbSet<User> Users { get; set; }
     }
 }
