@@ -19,12 +19,19 @@ namespace MagazynEdu_v2.Controllers
         {
         }
 
-        [AllowAnonymous]
         [HttpGet]
         [Route("")]
         public Task<IActionResult> GetAll([FromQuery] GetUsersRequest request)
         {
             return this.HandleRequest<GetUsersRequest, GetUsersResponse>(request);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("authenticate")]
+        public Task<IActionResult> Post([FromBody] ValidateUserRequest request)
+        {
+            return this.HandleRequest<ValidateUserRequest, ValidateUserResponse>(request);
         }
     }
 }

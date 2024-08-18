@@ -3,10 +3,12 @@ using MagazynEdu.ApplicationServices.API.Domain;
 using MagazynEdu.ApplicationServices.API.Mappings;
 using MagazynEdu.ApplicationServices.API.Validators;
 using MagazynEdu.ApplicationServices.Components.OpenWeather;
+using MagazynEdu.Authentication;
 using MagazynEdu.DataAccess;
 using MagazynEdu.DataAccess.CQRS;
 using MagazynEdu.DataAccess.CQRS.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,6 +38,21 @@ namespace MagazynEdu_v2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //same origian policy
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    bulider =>
+                    {
+                        bulider.AllowAnyOrigin();
+                        bulider.AllowAnyHeader();
+                        bulider.AllowAnyMethod();
+                    });
+            });
+
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+
             services.AddMvcCore()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddBookCaseRequestValidator>());
 
@@ -77,9 +94,11 @@ namespace MagazynEdu_v2
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
 
+            app.UseCors();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
